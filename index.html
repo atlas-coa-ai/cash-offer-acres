@@ -32,11 +32,11 @@
                 min-height: 100%;
                 width: auto;
                 height: auto;
-                background-image: url('images/backdrop_img.png');
+                background-image: url('images/backdrop_poster.jpg');
                 background-size: cover;
                 background-position: center;
                 z-index: 1;
-                transition: opacity 900ms ease-in-out;
+                transition: opacity 150ms ease-out;
             }
             .visible {
                 opacity: 1;
@@ -60,12 +60,8 @@
                 height: auto;
                 object-fit: cover;
                 z-index: 2;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 900ms ease-in-out;
-            }
-            #landingvideo.video-ready {
                 opacity: 1;
+                pointer-events: none;
             }
             .no-scroll {
                 overflow: hidden !important;
@@ -514,9 +510,9 @@
     </head>
     <body>
 
-        <img id="static-backdrop" src="images/backdrop_img.png" alt="mountain sunset">
+        <img id="static-backdrop" src="images/backdrop_poster.jpg" alt="mountain sunset">
 
-        <video autoplay loop playsinline muted preload="auto" poster="images/backdrop_img.png" id="landingvideo">
+        <video autoplay loop playsinline muted preload="auto" poster="images/backdrop_poster.jpg" id="landingvideo">
             <source src="videos/backdrop_video.mp4" type="video/mp4"/>
             Your browser does not support the video tag.
         </video>

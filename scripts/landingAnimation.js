@@ -290,9 +290,7 @@ function startBackgroundVideo(elements) {
         if (videoRevealed) return;
         videoRevealed = true;
         video.classList.add('video-ready');
-        setTimeout(() => {
-            staticBackdrop.classList.add('hidden');
-        }, 700);
+        staticBackdrop.classList.add('hidden');
     };
 
     video.addEventListener('playing', revealVideo, { once: true });
