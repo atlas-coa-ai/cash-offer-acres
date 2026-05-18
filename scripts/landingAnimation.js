@@ -283,33 +283,29 @@ function startMainLogoAnimation(elements) {
 
 function startBackgroundVideo(elements) {
     const { video, staticBackdrop } = elements;
-    if (!video || !staticBackdrop) return Promise.resolve('video unavailable');
+    if (!video || !staticBackdrop) return;
 
     let videoRevealed = video.classList.contains('video-ready');
-    return new Promise(resolve => {
-        const revealVideo = () => {
-            if (videoRevealed) return;
-            videoRevealed = true;
-            video.classList.add('video-ready');
-            staticBackdrop.classList.add('hidden');
-            resolve('video playing');
-        };
+    const revealVideo = () => {
+        if (videoRevealed) return;
+        videoRevealed = true;
+        video.classList.add('video-ready');
+        staticBackdrop.classList.add('hidden');
+    };
 
-        video.addEventListener('playing', revealVideo, { once: true });
-        video.addEventListener('canplay', () => {
-            if (!video.paused) revealVideo();
-        }, { once: true });
+    video.addEventListener('playing', revealVideo, { once: true });
+    video.addEventListener('canplay', () => {
+        if (!video.paused) revealVideo();
+    }, { once: true });
 
-        if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !video.paused) {
-            revealVideo();
-        }
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !video.paused) {
+        revealVideo();
+    }
 
-        video.play()
-            .then(revealVideo)
-            .catch(error => {
-                console.warn("Video failed to play automatically", error);
-                resolve('video blocked');
-            });
+    video.play()
+        .then(revealVideo)
+        .catch(error => {
+            console.warn("Video failed to play automatically", error);
         });
 }
 
@@ -336,7 +332,7 @@ function startIntroSequence(elements) {
                 }, 2000);
             }
         }, { once: true });
-    }, 2500);
+    }, 700);
 }
 
 function initailizeAnimationLogic(elements) {
@@ -350,7 +346,7 @@ function initailizeAnimationLogic(elements) {
         return;
     }
 
-    const videoStartedPromise = startBackgroundVideo(elements);
+    startBackgroundVideo(elements);
 
     if (sessionStorage.getItem('animationPlayed')) {
         fadeInAboveTheFold(elements, 0);
@@ -368,16 +364,11 @@ function initailizeAnimationLogic(elements) {
         }
     });
 
-    const logoTimeoutPromise = new Promise(resolve => setTimeout(() => resolve('logo timeout'), 1500));
-    const videoTimeoutPromise = new Promise(resolve => setTimeout(() => resolve('video timeout'), 4000));
-    const introReadyPromise = Promise.all([
-        Promise.race([logoLoadPromise, logoTimeoutPromise]),
-        Promise.race([videoStartedPromise, videoTimeoutPromise])
-    ]);
+    const logoTimeoutPromise = new Promise(resolve => setTimeout(() => resolve('logo timeout'), 1000));
 
-    introReadyPromise
-        .then(([logoResult, videoResult]) => {
-            console.log(`Starting intro sequence after ${logoResult} and ${videoResult}.`);
+    Promise.race([logoLoadPromise, logoTimeoutPromise])
+        .then(result => {
+            console.log(`Starting intro sequence after ${result}.`);
             startIntroSequence(elements);
         })
         .catch(error => {
