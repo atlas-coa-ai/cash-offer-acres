@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cash Offer Acres | We Buy Land Nation Wide</title>
+        <meta name="description" content="Sell your land fast for cash. We cover all closing costs and close quickly. Get the value out of your land back into your hands. Call today.">
+        <meta name="robots" content="index, follow">
+        <link rel="stylesheet" href="css/styles.css">
+        <link rel="main" href="index.html">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="canonical" href="https://www.cashofferacres.com/">
+        <link rel="icon" href="images/icon_logo.png">
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body, html {
+                width: 100%;
+                font-family: 'Segoe UI', sans-serif;
+                line-height: 1.25;
+                overflow-x: hidden;
+                font-size: clamp(16px, 1.5vw, 22px);
+            }
+            #static-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
+                background-image: url('images/backdrop_img.png');
+                background-size: cover;
+                background-position: center;
+                z-index: 1; /* Match the video's z-index */
+            }
+            .visible {
+                opacity: 1;
+                transition: opacity 1s ease-in-out;
+            }
+            .hidden {
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 1s ease-in-out;
+            }
+            #landingvideo {
+                position: fixed;
+                top: 0;
+                left: 0;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
+                object-fit: cover;
+                z-index: 1;
+                opacity: 1;
+                pointer-events: none;
+            }
+            .no-scroll {
+                overflow: hidden !important;
+                height: 100vh;
+            }
+
+            p, h1, h2, h3, h4, h5, h6, span {
+                cursor: default;
+            }
+
+            /* Navbar styling */
+
+            #navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 2rem;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.05) 100%);
+                z-index: 1003;
+                transition: opacity 1.5s ease;
+            }
+            .nav-left {
+                display: flex;
+                align-items: center;
+            }
+            .nav-center {
+                display: flex;
+                justify-content: space-around;
+            }
+            .nav-right {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+            .nav-right a {
+                font-size: 1rem;
+            }
+            #navLogoSlot {
+                width: clamp(77.963px, 16.706vw, 111.375px);
+                height: clamp(99.124px, 21.161vw, 141.446px);
+            }
+            #navLogo {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .fade-out-main-logo {
+                animation: fadeOutMainLogo 1s forwards;
+                animation-delay: 0s;
+            }
+            .call-link {
+                padding: 1rem;
+                background: linear-gradient(to bottom, royalblue 0%, mediumblue 100%);
+                border-radius: 20px;
+                text-decoration: none;
+                color: gold;
+                font-weight: bold;
+            }
+            #hamburger-menu {
+                font-size: 2.5rem;
+                background-color: transparent;
+                color: gold;
+                border: none;
+                cursor: pointer;
+            }
+            #nav-links a {
+                font-size: 1rem;
+                text-decoration: none;
+                color: white;
+                margin-bottom: .5rem;
+            }
+            #nav-links a.active {
+                color: gold;
+                font-weight: bold;
+                border-bottom: 2px solid gold;
+            }
+            #intro {
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 100vw;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: fixed;
+                z-index: 1002;
+                transition: opacity 1s ease-in-out, visibility 1s ease-in-out 1s;
+            }
+            .intro-gone {
+                opacity: 0;
+                visibility: hidden;
+            }
+            #brandingBlock {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                z-index: 1002;
+                position: relative;
+            }
+            #mainLogo {
+                width: clamp(175px, 25vw, 300px);
+                height: auto;
+                display: block;
+                z-index: 1002;
+            }
+            #tagline {
+                overflow: hidden;
+                border-right: .15rem solid gold;
+                white-space: nowrap;
+                width: 0;
+                color: white;
+                font-size: 2rem;
+                margin-top: 1rem;
+                z-index: 1001;
+                color: white;
+                font-weight: bold;
+            }
+            .tagline-typing {
+                animation: typing 3s steps(24, end) forwards, blink-caret .75s step-end infinite;
+            }
+            .hide-caret {
+                border-right-color: transparent !important;
+            }
+            .animation-intro {
+                animation: introAnimation 1.5s ease-in-out forwards;
+            }
+            .fade-out {
+                animation: fadeOutTagline 2s forwards;
+                animation-delay: 0s;
+            }
+            .dim-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(112, 156, 252, 0.8);
+                opacity: 0;
+                transition: opacity 3s ease-in-out;
+                z-index: 2;
+            }
+            .dim-in {
+                opacity: 0.90;
+                backdrop-filter: blur(15px);
+            }
+            #pageContent {
+                z-index: 3;
+                position: relative;
+                transition: opacity 1.5s ease;
+                display: flex;
+                flex-direction: column;
+                color: black;
+            }
+            #pageContent.hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+            .content-in-view {
+                margin-top: 0;
+            }
+
+            /* Responsive sizing */
+            @media (min-width: 769px) {
+                #nav-links {
+                    position: static;
+                    display: flex;
+                    gap: clamp(.2rem, 4vw, 2rem);
+                    align-items: center;
+                    visibility: visible;
+                    opacity: 1;
+                    padding: 1rem;
+                }
+
+                #hamburger-menu {
+                    display: none;
+                }
+
+                #welcome {
+                    justify-content: center;
+                    align-items: center;
+                }
+
+            }
+
+            @media (max-width: 768px) { 
+                #tagline {
+                    font-size: 1.5rem;
+                }
+
+                #navbar {
+                    padding: 1rem;
+                }
+
+                #nav-links {
+                    position: absolute;
+                    align-items: center;
+                    top: 100%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(0, 0, 0, 0.85);
+                    border-radius: 0px 0px 10px 10px;
+                    padding: 1rem;
+                    flex-direction: column;
+                    width: 50%;
+                    max-width: 500px;
+                    display: none;
+                    z-index: 1000;
+                }
+
+                #hamburger-menu {
+                    display: block;
+                }
+
+                #nav-links.open {
+                    display: flex;
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+
+                .intro-container {
+                    grid-template-columns: 1fr;
+                }
+
+                #above-the-fold {
+                    display: flex;
+                    flex-direction: column;
+                    padding: 1rem;
+                    gap: 2rem;
+                }
+
+                .grid-item-1 {
+                    font-size: 2rem;
+                }
+
+                .grid-item-2 {
+                    display: none;
+                }
+
+                .grid-item-3 {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: auto 1fr;
+                    justify-items: center;
+                    align-items: center;
+                    height: auto;
+                    padding: 1rem;
+                    gap: 1rem;
+                }
+
+                #intro-video-thumnail {
+                    grid-column: 1;
+                    grid-row: 1;
+                    position: relative;
+                    border-radius: 10px;
+                    overflow: hidden;
+                }
+
+                #intro-video-thumnail img {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    object-fit: contain;
+                }
+
+                .grid-item-3 p {
+                    grid-column: 1;
+                    grid-row: 2;
+                }
+            }
+        </style>
+
+        <link rel="stylesheet" href="css/styles.css" media="print" onload="this.media='all'">
+        <noscript>
+            <link rel="stylesheet" href="css/styles.css">
+        </noscript>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
+        <noscript>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+        </noscript>
+
+        <meta property="og:title" content="We Buy Land Nation Wide">
+        <meta property="og:description" content="Sell your land fast for cash. We cover all closing costs and close quickly.">
+        <meta property="og:image" content="https://www.cashofferacres.com/images/preview.jpg">
+        <meta property="og:url" content="https://www.cashofferacres.com">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Cash Offer Acres">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Cash Offer Acres | Sell Your Land Fast for Cash">
+        <meta name="twitter:description" content="We buy land nationwide. Get a fast, fair cash offer with no fees or closing costs.">
+        <meta name="twitter:image" content="https://www.cashofferacres.com/images/preview.jpg">
+
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Cash Offer Acres",
+            "url": "https://www.cashofferacres.com",
+            "logo": "https://www.cashofferacres.com/images/logo.png",
+            "description": "Cash Offer Acres buys land nationwide. We make fast, fair cash offers and cover all closing costs. Sell your land quickly and hassle-free.",
+            "sameAs": [
+                "https://www.facebook.com/cashofferacres",
+                "https://www.instagram.com/cashofferacres",
+                "https://www.linkedin.com/company/cashofferacres"
+            ],
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+1-800-555-1234",
+                "contactType": "Customer Service",
+                "areaServed": "US",
+                "availableLanguage": ["English", "Spanish"]
+            }
+        }
+        </script>
+    </head>
+    <body>
+              <header id="navbar">
+            <div class="nav-left">
+                <div id="navLogoSlot">
+                    <a href="#">
+                        <img id="navLogo" src="images/logo.png" alt="Cash Offer Acres Logo"/>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-center">
+                <nav id="nav-links" class="nav-expanded">
+                    <a href="index.html#">Home</a>
+                    <a href="index.html#services-container">Properties</a>
+                    <a href="index.html#process">Process</a>
+                    <a href="index.html#faq_acordian">FAQ's</a>
+                    <a href="index.html#contact">Contact</a>
+                </nav>
+                <button id="hamburger-menu">
+                    ☰
+                </button>
+            </div>
+
+            <div class="nav-right">
+                <a href="tel:+1-985-319-1961" class="call-link">Call Now</a>
+            </div>
+        </header>
+        <section class="privacy-policy-main">
+            <div  class="policy-section">
+                <h1>Cash Offer Acres website Privacy Policy</h1>
+                <h2>Last Revised: 09/19/2024</h2>
+                <p>Our privacy policy applies to information we collect when you use or access our website, application, or just interact with us. We may change this privacy policy from time to time. Whenever we make changes to this privacy policy, the changes are effective immediately after we post the revised privacy policy (as indicated by revising the date at the top of our privacy policy). We encourage you to review our privacy policy whenever you access our services to stay informed about our information practices and the ways you can help protect your privacy.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Collection of Information</h2>
+
+                <h3>Information You Provide to Us</h3>
+
+                <p>We collect information you provide directly to us. For example, we collect information when you participate in any interactive features of our services, fill out a form, request customer support, provide any contact or identifying information or otherwise communicate with us. The types of information we may collect include your name, email address, postal address, credit card information and other contact or identifying information you choose to provide.</p>
+
+                <h3>Information We Collect Automatically When You Use the Services</h3>
+
+                <p>When you access or use our services, we automatically collect information about you, including:</p>
+
+                <ul>
+                    <li><strong>Log Information</strong>: We log information about your use of our services, including the type of browser you use, access times, pages viewed, your IP address and the page you visited before navigating to our services.</li>
+                    <li><strong>Device Information</strong>: We collect information about the computer you use to access our services, including the hardware model, and operating system and version.</li>
+                    <li><strong>Location Information</strong>: We may collect information about the location of your device each time you access or use one of our mobile applications or otherwise consent to the collection of this information.</li>
+                    <li><strong>Information Collected by Cookies and Other Tracking Technologies</strong>: We use various technologies to collect information, and this may include sending cookies to your computer. Cookies are small data files stored on your hard drive or in your device memory that helps us to improve our services and your experience, see which areas and features of our services are popular and count visits. We may also collect information using web beacons (also known as "tracking pixels"). Web beacons are electronic images that may be used in our services or emails and to track count visits or understand usage and campaign effectiveness.</li>
+                </ul>
+
+                <p>For more details about how we collect information, including details about cookies and how to disable them, please see "Your Information Choices" below.</p>
+
+                <h3>Information We Collect From Other Sources</h3>
+
+                <p>In order to provide you with access to the Service, or to provide you with better service in general, we may combine information obtained from other sources (for example, a third-party service whose application you have authorized or used to sign in) and combine that with information we collect through our services.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Use of Information</h2>
+
+                <p>We use information about you for various purposes, including to:</p>
+
+                <ul>
+                    <li>Provide, maintain and improve our services;</li>
+                    <li>Provide services you request, process transactions and to send you related information;</li>
+                    <li>Send you technical notices, updates, security alerts and support and administrative messages;</li>
+                    <li>Respond to your comments, questions and requests and provide customer service;</li>
+                    <li>Communicate with you about news and information related to our service;</li>
+                    <li>Monitor and analyze trends, usage and activities in connection with our services; and</li>
+                    <li>Personalize and improve our services.</li>
+                </ul>
+
+                <p>By accessing and using our services, you consent to the processing and transfer of your information in and to the United States and other countries.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Sharing of Information</h2>
+
+                <p>We may share personal information about you as follows:</p>
+
+                <ul>
+                <li>With third party vendors and other service providers who need access to your information to carry out work on our behalf.</li>
+                <li>If we believe disclosure is reasonably necessary to comply with any applicable law, regulation, legal process or governmental request;</li>
+                <li>To enforce applicable user agreements or policies, including our <a class="tos-link" href="termsOfService.html">Terms of Service</a> and to protect us, our users or the public from harm or illegal activities;</li>
+                <li>In connection with any merger, sale of Cash Offer Acres assets, financing or acquisition of all or a portion of our business to another company; and</li>
+                <li>If we notify you through our services (or in our privacy policy) that the information you provide will be shared in a particular manner and you provide such information.</li>
+                </ul>
+
+                <p>We may also share aggregated or anonymized information that does not directly identify you.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Third Party Analytics</h2>
+
+                <p>We may allow third parties to provide analytics services. These third parties may use cookies, web beacons and other technologies to collect information about your use of the services and other websites, including your IP address, web browser, pages viewed, time spent on pages, links clicked and conversion information. This information may be used by us and third parties to, among other things, analyze and track data, determine the popularity of certain content and other websites and better understand your online activity. Our privacy policy does not apply to, and we are not responsible for, third party cookies, web beacons or other tracking technologies and we encourage you to check the privacy policies of these third parties to learn more about their privacy practices.</p>
+            </div>
+
+            <div class="policy-section">
+                <h2>Security</h2>
+
+                <p>We take reasonable measures to help protect personal information from loss, theft, misuse and unauthorized access, disclosure, alteration and destruction.</p>
+            </div>
+
+            <div class="policy-section" id="last-div">
+                <h2>Your Information Choices</h2>
+
+                <h3>Location Information</h3>
+
+                <p>When you first launch any of our mobile applications that collect location information, you will be asked to consent to the application's collection of this information. If you initially consent to our collection of location information, you can subsequently stop the collection of this information at any time by changing the preferences on your mobile device. [If you do so, our mobile applications, or certain features thereof, will no longer function.] You may also stop our collection of location information by following the standard uninstall process to remove all of our mobile applications from your device.</p>
+
+                <h3>Cookies</h3>
+
+                <p>Most web browsers are set to accept cookies by default. If you prefer, you can usually choose to set your browser to remove or reject browser cookies. Please note that if you choose to remove or reject cookies, this could affect the availability and functionality of our services.</p>
+
+                <h3>Promotional Communications</h3>
+
+                <p>You may opt out of receiving any promotional emails from us by following the instructions in those emails. If you opt out, we may still send you non-promotional communications, such as those about your account or our ongoing business relations.</p>
+
+                <p>If you have any questions about this privacy policy, please contact us at:  info@cashofferacres.com</p>
+            </div>
+        </section>
+        <footer>
+            <div class="footer-container">
+                <div class="upper-footer">
+                    <div class="footer-row">
+                        <h3 class="footer-heading">Our Contact</h3>
+                        <address>
+                        <strong>Cash Offer Acres LLC</strong><br>
+                        500 West Overdrive #33535<br>
+                        Sanford, NC 27330 </address>
+                        <p>
+                            <i class="fas fa-phone"></i> (984) 319-1961 <br>
+                            <i class="fas fa-envelope"></i> info@cashofferacres.com
+                        </p>
+                    </div>
+                    <div class="footer-row">
+                        <h3 class="footer-heading">Quick Links</h3>
+                        <ul class="link-list">
+                            <li><a href="termsOfService.html">Terms and conditions</a></li>
+                            <li><a href="privacyPolicy.html">Privacy policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="sub-footer">
+                    <div class="copyright">
+                        <p>
+                            <span>&copy; Cash Offer Acres 2025 All right reserved.<!--By </span><a href="http://webthemez.com" target="_blank">WebThemez</a-->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <script src="scripts/legalPages.js"></script>
+    </body>
+</html>
