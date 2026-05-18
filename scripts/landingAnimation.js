@@ -281,14 +281,11 @@ function startMainLogoAnimation(elements) {
     }, { once: true });
 }
 
-function startIntroSequence(elements) {
-    const {tagline, introScreen, mainLogo, video, staticBackdrop} = elements;
-    if (!tagline || !introScreen || !mainLogo || !video || !staticBackdrop) {
-        console.error("Essential intro sequence element(s) missing.");
-        return;
-    }
+function startBackgroundVideo(elements) {
+    const { video, staticBackdrop } = elements;
+    if (!video || !staticBackdrop) return;
 
-    let videoRevealed = false;
+    let videoRevealed = video.classList.contains('video-ready');
     const revealVideo = () => {
         if (videoRevealed) return;
         videoRevealed = true;
@@ -298,14 +295,31 @@ function startIntroSequence(elements) {
         }, 700);
     };
 
-    introScreen.classList.remove('hidden');
-    video.classList.remove('hidden');
     video.addEventListener('playing', revealVideo, { once: true });
+    video.addEventListener('canplay', () => {
+        if (!video.paused) revealVideo();
+    }, { once: true });
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !video.paused) {
+        revealVideo();
+    }
+
     video.play()
         .then(revealVideo)
         .catch(error => {
             console.warn("Video failed to play automatically", error);
         });
+}
+
+function startIntroSequence(elements) {
+    const {tagline, introScreen, mainLogo, video, staticBackdrop} = elements;
+    if (!tagline || !introScreen || !mainLogo || !video || !staticBackdrop) {
+        console.error("Essential intro sequence element(s) missing.");
+        return;
+    }
+
+    introScreen.classList.remove('hidden');
+    video.classList.remove('hidden');
     tagline.classList.add('hide-caret');
 
     setTimeout(() => {
@@ -325,26 +339,23 @@ function startIntroSequence(elements) {
 
 function initailizeAnimationLogic(elements) {
     const {video, mainLogo, navLogoSlot, navbar, dimOverlay, pageContent, introScreen, staticBackdrop, tagline} = elements;
-    
-    if (sessionStorage.getItem('animationPlayed')) {
-        fadeInAboveTheFold(elements, 0);
-        return;
-    }
-    
-    sessionStorage.setItem('animationPlayed', 'true');
 
     if (!video || !mainLogo || !introScreen) {
         console.error("Missing essential animation elements. Fading in content.");
-        video.classList.add('remove');
-        dimOverlay.classList.add('remove');
+        if (video) video.classList.add('remove');
+        if (dimOverlay) dimOverlay.classList.add('remove');
         fadeInAboveTheFold(elements);
         return;
     }
 
-    const videoLoadPromise = new Promise(resolve => {
-        video.addEventListener('loadeddata', () => resolve('video loaded'), { once: true});
-        video.addEventListener('error', () => resolve('video failed'), { once: true });
-    });
+    startBackgroundVideo(elements);
+
+    if (sessionStorage.getItem('animationPlayed')) {
+        fadeInAboveTheFold(elements, 0);
+        return;
+    }
+
+    sessionStorage.setItem('animationPlayed', 'true');
 
     const logoLoadPromise = new Promise(resolve => {
         if (mainLogo.complete) {
@@ -355,22 +366,12 @@ function initailizeAnimationLogic(elements) {
         }
     });
 
-    const elementsReadyPromise = Promise.all([videoLoadPromise, logoLoadPromise]);
-    const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('timeout reached'), 4000));
+    const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('logo timeout'), 1500));
 
-    Promise.race([elementsReadyPromise, timeoutPromise])
+    Promise.race([logoLoadPromise, timeoutPromise])
         .then(result => {
-            if (result === 'timeout reached') {
-                console.log("Timeout reached. Skipping intro animation");
-                video.classList.add('remove');
-                dimOverlay.classList.add('remove');
-                fadeInAboveTheFold(elements);
-            } else {
-                console.log("All essential elements loaded. Starting intro sequence.");
-                setTimeout(() => {
-                    startIntroSequence(elements);
-                }, 1000);
-            }
+            console.log(`Starting intro sequence after ${result}.`);
+            startIntroSequence(elements);
         })
         .catch(error => {
             console.error("An error occured during loading:", error);
