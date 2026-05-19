@@ -187,45 +187,46 @@ function fadeInAboveTheFold(elements, delay = 1600) {
 
         }, 1000);
 
-        const scrollSection = document.querySelectorAll(
-            '#above-the-fold, #our-team, #process, #faq_acordian, #contact'
-        );
-        const allNavLinks = document.querySelectorAll('#nav-links a');
+        const navSections = Array.from(document.querySelectorAll(
+            '#our-team, #services-container, #process, #faq_acordian, #contact'
+        ));
+        const allNavLinks = Array.from(document.querySelectorAll('#nav-links a'));
 
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px 0px -60% 0px',
-            threshold: 0
-        };
-
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    let targetId = entry.target.id;
-                    if (targetId === 'above-the-fold') {
-                        if (window.scrollY < 50) {
-                            allNavLinks.forEach(link => link.classList.remove('active'));
-                            return;
-                        } else {
-                            targetId = 'services-container';
-                        }
-                    }
-
-                    const currentTargetId = (targetId === 'above-the-fold') ? 'services-container' : targetId;
-
-                    allNavLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href').substring(1) === targetId) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
+        function setActiveNavLink(activeId) {
+            allNavLinks.forEach(link => {
+                link.classList.toggle('active', link.getAttribute('href') === `#${activeId}`);
             });
-        }, observerOptions);
+        }
 
-        scrollSection.forEach(section => {
-            observer.observe(section);
-        });
+        function updateActiveNavLink() {
+            const navbarHeight = navbar.getBoundingClientRect().height || 0;
+            const markerY = navbarHeight + 20;
+            const firstSection = navSections[0];
+            if (firstSection && firstSection.getBoundingClientRect().top > markerY) {
+                allNavLinks.forEach(link => link.classList.remove('active'));
+                return;
+            }
+
+            const activeSection = [...navSections].reverse().find(section => {
+                return section.getBoundingClientRect().top <= markerY + 40;
+            });
+
+            if (activeSection) setActiveNavLink(activeSection.id);
+        }
+
+        let navUpdateQueued = false;
+        function queueActiveNavUpdate() {
+            if (navUpdateQueued) return;
+            navUpdateQueued = true;
+            requestAnimationFrame(() => {
+                navUpdateQueued = false;
+                updateActiveNavLink();
+            });
+        }
+
+        window.addEventListener('scroll', queueActiveNavUpdate, { passive: true });
+        window.addEventListener('resize', queueActiveNavUpdate);
+        updateActiveNavLink();
 
         const navLinksA = document.querySelectorAll('#nav-links a')
         const hamburger = document.getElementById("hamburger-menu");
